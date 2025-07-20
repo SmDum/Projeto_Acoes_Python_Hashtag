@@ -7,7 +7,7 @@ from datetime import timedelta
 # Função para carregar os dados das ações
 @st.cache_data
 def carregar_dados(empresas):
-    cotacoes_acao = yf.download(empresas, start="2015-01-01", end="2024-07-01")["Close"]
+    cotacoes_acao = yf.download(empresas, start="2015-01-01", end="2025-07-01")["Close"]
     return cotacoes_acao
 
 # Função para carregar os tickers das ações
@@ -34,7 +34,12 @@ O gráfico abaixo representa a evolução do preço das ações ao longo dos ano
 st.sidebar.header("Filtros")
 
 # filtro de acoes
-lista_acoes = st.sidebar.multiselect("Escolha as ações para visualizar", dados.columns)
+primeira_acao = dados.columns[0] if len(dados.columns) > 0 else None
+lista_acoes = st.sidebar.multiselect(
+    "Escolha as ações para visualizar",
+    dados.columns,
+    default=[primeira_acao] if primeira_acao else []
+)
 if lista_acoes:
     dados = dados[lista_acoes]
     if len(lista_acoes) == 1:
